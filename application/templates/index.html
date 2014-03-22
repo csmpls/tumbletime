@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block body %}
+
+  {% if g.user and posts %}
+  <div class="reveal">
+    <div class="slides">
+
+    {% for post in posts %}
+
+        {% for photo in post['photos'] %}
+          <section>
+            <img src="{{photo['original_size']['url']}}"> 
+          </section>
+
+        {% endfor %}
+
+    {% endfor %}
+    </div>
+  </div>
+
+<script src="http://cosmopol.is/cereal/lib/js/head.min.js"></script>
+    <script src="http://cosmopol.is/cereal/js/reveal.js"></script>
+    <script src="http://cosmopol.is/cereal/js/keyboard.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: false,
+        center: true,
+        //autoSlide: 5000,
+        keyboard: true,
+        //loop: true,
+
+        theme: Reveal.getQueryHash().theme || 'night', // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+      });
+
+      // our lists
+      var interested = []
+      var not_interested = []
+
+      // set keyboard shortcuts
+      KeyboardJS.on('a', function() { addToList(interested) }, null)    
+      KeyboardJS.on('b', function() { addToList(not_interested) }, null)    
+
+      
+      function addToList(list) {
+        
+        var slide_content = Reveal.getCurrentSlide()
+        list.push(slide_content)
+        
+        if (!Reveal.isLastSlide()) {
+          Reveal.next()
+        }
+      }
+
+
+    </script>
+</body>
+
+</html>
+
+    
+  {% endif %}
+
+    {% if g.user %}
+  <li><a href="{{ url_for('logout') }}">sign out [{{ g.user.name }}]</a>
+  {% else %}
+  <li><a href="{{ url_for('login') }}">sign in</a>
+  {% endif %}
+</ul>
+
+{% for message in get_flashed_messages() %}
+  <p class=message>{{ message }}
+{% endfor %}
+
+</body>
+</html>
+
+{% endblock %}
+
