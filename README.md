@@ -1,4 +1,4 @@
-feely
+tumbletime
 =====
 
-feedly in serial
+tumblr, one at a time

@@ -51,13 +51,11 @@ def index():
         response = client.dashboard(type='photo')
         posts.extend(response['posts'])
 
-        # now get the next 20 since the end of the last one
-        response = client.dashboard(type='photo', offset=20)
-        posts.extend(response['posts'])
+        # now let's fetch the next 80
+        for i in range (4):
+            response = client.dashboard(type='photo', offset=20*i)
+            posts.extend(response['posts'])
 
-        # now get the next 20 since the end of the last one
-        response = client.dashboard(type='photo', offset=40)
-        posts.extend(response['posts'])
         return render_template('index.html', posts=posts)
 
     return render_template('index.html', posts=None)
