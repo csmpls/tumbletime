@@ -14,12 +14,10 @@
               <img src="{{photo['original_size']['url']}}">
             </section>
 
-            <section class = "meta">
+            <section class = "meta" id="{{post['reblog_key']}}">
               <div class ="blog-name">{{post['blog_name']}}</div>
               <div class ="source-title">{{post['source_title']}}</div>
               <div class ="caption">{{post['caption']}}</div>
-              <div class ="reblog_key">{{post['reblog_key']}}</div>
-              <div class ="id">{{post['id']}}</div>
             </section>
 
           </section>
@@ -37,6 +35,7 @@
 <script src="http://cosmopol.is/cereal/js/keyboard.js"></script>
 
 <script>
+
 
   // Full list of configuration options available here:
   // https://github.com/hakimel/reveal.js#configuration
@@ -104,6 +103,10 @@
       function( data ) {
         console.log(data) 
       }); 
+
+    if (!Reveal.isLastSlide()) {
+      Reveal.right()
+    }
   }
 
   function getPostKeys(slide) {
@@ -111,27 +114,28 @@
     // returns true if this is a meta slide
     if (slide.className.indexOf("meta") !== -1) {
 
-      // make it a jquery object
-      var meta = $(slide)
+      // if it is, we get reblog key from its id
+      var reblog_key = slide.id
+
+      // for post id, get display div
+      var display = $('#'+reblog_key).siblings(".display")
 
       // get our post id from slide content
-      var post_id = meta.children('.id').html();
+      var post_id = display.attr('id')
 
     }
 
-    // if the current slide is display slide and not meta slide, 
-    // we have to get the metadata curcuitously 
+    // if the current slide is display slide, 
     else if (slide.className.indexOf("display") !== -1) {
 
-      //get post id
+      //get post id from its id
       var post_id = slide.id
 
-      // the metadata for the post is in the next sibling of the viewed post
+      //  the reblog key is in the meta div
       var meta = $('#'+post_id).next()
-    }
 
-    //get reblog key from meta
-    var reblog_key = meta.children('.reblog_key').html();
+      var reblog_key = meta.attr('id')
+    }
 
     return [post_id,reblog_key]
     

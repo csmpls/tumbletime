@@ -2,7 +2,7 @@
 {% block body %}
 
 {% for blog in user_blogs %} 
-  <form method="POST" action="/select_blog">
+  <form method="POST" action="select_blog">
     <input type="submit" name="blog" value="{{blog['name']}}" />
    </form>
 {% endfor %}

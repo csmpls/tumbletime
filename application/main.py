@@ -3,6 +3,7 @@ from flask import g, session, request, url_for, flash
 from flask import redirect, render_template, jsonify
 from flask_oauthlib.client import OAuth
 import pytumblr
+from HTMLParser import HTMLParser
 
 SECRET_KEY = 'a555c33332'
 DEBUG = True
@@ -23,6 +24,20 @@ tumblr = oauth.remote_app('tumblr',
     consumer_key=CONSUMER_KEY,
     consumer_secret=CONSUMER_SECRET,
 )
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 @tumblr.tokengetter
 def get_tumblr_token():
@@ -66,6 +81,9 @@ def index():
             for i in range (4):
                 response = client.dashboard(type='photo', offset=20*(i+1))
                 posts.extend(response['posts'])
+
+            for post in posts:
+                post['caption'] = strip_tags(post['caption'])
 
             return render_template('index.html', posts=posts)
 
