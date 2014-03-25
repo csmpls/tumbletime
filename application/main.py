@@ -5,11 +5,14 @@ from flask_oauthlib.client import OAuth
 import pytumblr
 
 
+# in the future, we have user select their blog
+blog_name = None
+
 SECRET_KEY = 'a555c33332'
 DEBUG = True
 
-CONSUMER_KEY = 'eGV5NNygl2TLbDezHeUfcgArAPY6YSk3fE2dRUaNHOclQumJfu'
-CONSUMER_SECRET = 'NBw7MOnMTuuOrQ7ofa586QJAOkNMGsxKx3MJwMIKDIQtcQJl4J'
+CONSUMER_KEY = 'FPLOKGJWPtZY8svlFUj2aHCTZM7E84PVA1YYBRLDufiPTMwWwE'
+CONSUMER_SECRET = 'Wpl9dCqYrOjuVoJCWh7n9z07A0YxZqnbC59mZpn1PHsmivZZhW'
 
 app = Flask(__name__)
 app.debug = DEBUG
@@ -41,25 +44,38 @@ def before_request():
 
 @app.route('/')
 def index():
+
     posts = [] 
+
+    # do we have a session going?
     if g.user:
 
+        # authenticate the user
         oauth_token, oauth_token_secret = get_tumblr_token()
         client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
 
-        # this gives first 20 posts
-        response = client.dashboard(type='photo')
-        posts.extend(response['posts'])
+        # if user has picked a blog,
+        # fetch posts
+        if blog_name:
 
-        # now let's fetch the next 80
-        for i in range (4):
-            response = client.dashboard(type='photo', offset=20*(i+1))
+            # this gives first 20 posts
+            response = client.dashboard(type='photo')
             posts.extend(response['posts'])
 
-        return render_template('index.html', posts=posts)
+            # now let's fetch the next 80
+            for i in range (4):
+                response = client.dashboard(type='photo', offset=20*(i+1))
+                posts.extend(response['posts'])
+
+            return render_template('index.html', posts=posts)
+
+        # if we have a session, but user hasn't picked a blog
+        else:
+
+            user_blogs = client.info()['user']['blogs']
+            return render_template('whichblog.html', user_blogs=user_blogs)
 
     return render_template('index.html', posts=None)
-
 
 @app.route('/login')
 def login():
@@ -72,6 +88,13 @@ def logout():
     session.pop('tumblr_oauth', None)
     return redirect(url_for('index'))
 
+@app.route('/select_blog', methods=['POST'])
+def select_blog():
+    # get post data
+    blog_selection = request.form['blog']
+    print(blog_selection)
+
+    return redirect(url_for('index'))
 
 @app.route('/oauthorized')
 @tumblr.authorized_handler
@@ -84,7 +107,46 @@ def oauthorized(resp):
 
 @app.route('/reblog', methods=['POST'])
 def reblog():
-    print('ok got it')
+
+    # get post data
+    post_id = request.form['post_id']
+    reblog_key = request.form['reblog_key']
+
+    # authenticate
+    oauth_token, oauth_token_secret = get_tumblr_token()
+    client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+
+    client.reblog(BLOG_NAME, id=post_id, reblog_key=reblog_key)
+
+    return jsonify(status='ok')
+
+@app.route('/like', methods=['POST'])
+def like():
+
+    # get post data
+    post_id = request.form['post_id']
+    reblog_key = request.form['reblog_key']
+
+    # authenticate
+    oauth_token, oauth_token_secret = get_tumblr_token()
+    client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+
+    client.like(id=post_id, reblog_key=reblog_key)
+
+    return jsonify(status='ok')
+
+@app.route('/steal', methods=['POST'])
+def steal():
+
+    # get post data
+    photo_url = request.form['img']
+
+    # authenticate
+    oauth_token, oauth_token_secret = get_tumblr_token()
+    client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+
+    client.create_photo(BLOG_NAME, source=photo_url)
+
     return jsonify(status='ok')
 
 if __name__ == '__main__':

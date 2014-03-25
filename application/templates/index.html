@@ -54,9 +54,10 @@
   });
 
   // set keyboard shortcuts
-  KeyboardJS.on('j', Reveal.down, null) 
-  KeyboardJS.on('u', function() { reblog(Reveal.getCurrentSlide()) }, null)    
-  KeyboardJS.on('p', function() { heart(Reveal.getCurrentSlide()) }, null)    
+
+  KeyboardJS.on('q', function() { steal(Reveal.getCurrentSlide()) }, null)    
+  KeyboardJS.on('w', function() { reblog(Reveal.getCurrentSlide()) }, null)    
+  KeyboardJS.on('e', function() { like(Reveal.getCurrentSlide()) }, null)    
 
   
   function reblog(slide) {
@@ -65,24 +66,44 @@
     post_keys = getPostKeys(slide)
     
     // send keys as a post request
-    $.post( "reblog", function( data ) {
-      $( ".result" ).html( data );
-    });
+    $.post( "reblog", 
+      {post_id: post_keys[0], reblog_key: post_keys[1]},
+      function( data ) {
+        console.log(data) 
+      });
   
     if (!Reveal.isLastSlide()) {
       Reveal.right()
     }
   }
 
- function heart(slide) {
+ function like(slide) {
     
-    // we will need the post id & reblog id
-    // hint: a function for this
-    // really these things should be in some <meta> field, but hidden
+    // we will need the post id (in [0]) & reblog key (in [1])
+    post_keys = getPostKeys(slide)
+    
+    // send keys as a post request
+    $.post( "like", 
+      {post_id: post_keys[0], reblog_key: post_keys[1]},
+      function( data ) {
+        console.log(data) 
+      }); 
     
     if (!Reveal.isLastSlide()) {
       Reveal.right()
     }
+  }
+
+  function steal(slide) {
+    // get the photo url
+    var photo_url = getPostPhoto(slide)
+
+    // send url to photo as post request
+    $.post( "steal", 
+      {img: photo_url},
+      function( data ) {
+        console.log(data) 
+      }); 
   }
 
   function getPostKeys(slide) {
@@ -115,6 +136,25 @@
     return [post_id,reblog_key]
     
 
+  }
+
+  function getPostPhoto(slide) {
+
+    // returns true if this is a meta slide
+    if (slide.className.indexOf("meta") !== -1) {
+
+      // make it a jquery object
+      var meta = $(slide)
+
+      // get the section with the photo in it 
+      var display_slide = meta.parent().children('.display')
+
+    // otherwise, if it's a display slide
+    } else if (slide.className.indexOf("display") !== -1) {
+      var display_slide = $(slide)
+    }
+
+    return display_slide.children()[0].src
   }
 
 </script>
