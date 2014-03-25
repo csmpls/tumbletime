@@ -9,7 +9,19 @@
 
         {% for photo in post['photos'] %}
           <section>
-            <img src="{{photo['original_size']['url']}}"> 
+
+            <section class="display" id="{{post['id']}}">
+              <img src="{{photo['original_size']['url']}}">
+            </section>
+
+            <section class = "meta">
+              <div class ="blog-name">{{post['blog_name']}}</div>
+              <div class ="source-title">{{post['source_title']}}</div>
+              <div class ="caption">{{post['caption']}}</div>
+              <div class ="reblog_key">{{post['reblog_key']}}</div>
+              <div class ="id">{{post['id']}}</div>
+            </section>
+
           </section>
 
         {% endfor %}
@@ -17,61 +29,101 @@
     {% endfor %}
     </div>
   </div>
+  {% endif %}
 
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://cosmopol.is/cereal/lib/js/head.min.js"></script>
-    <script src="http://cosmopol.is/cereal/js/reveal.js"></script>
-    <script src="http://cosmopol.is/cereal/js/keyboard.js"></script>
+<script src="http://cosmopol.is/cereal/js/reveal.js"></script>
+<script src="http://cosmopol.is/cereal/js/keyboard.js"></script>
 
-    <script>
+<script>
 
-      // Full list of configuration options available here:
-      // https://github.com/hakimel/reveal.js#configuration
-      Reveal.initialize({
-        controls: false,
-        progress: true,
-        history: false,
-        center: true,
-        //autoSlide: 5000,
-        keyboard: true,
-        //loop: true,
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: false,
+    progress: true,
+    history: false,
+    center: true,
+    //autoSlide: 5000,
+    keyboard: true,
+    //loop: true,
 
-        theme: Reveal.getQueryHash().theme || 'night', // available themes are in /css/theme
-        transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
-      });
+    theme: Reveal.getQueryHash().theme || 'night', // available themes are in /css/theme
+    transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+  });
 
-      // our lists
-      var interested = []
-      var not_interested = []
+  // set keyboard shortcuts
+  KeyboardJS.on('j', Reveal.down, null) 
+  KeyboardJS.on('u', function() { reblog(Reveal.getCurrentSlide()) }, null)    
+  KeyboardJS.on('p', function() { heart(Reveal.getCurrentSlide()) }, null)    
 
-      // set keyboard shortcuts
-      KeyboardJS.on('a', function() { addToList(interested) }, null)    
-      KeyboardJS.on('b', function() { addToList(not_interested) }, null)    
+  
+  function reblog(slide) {
 
-      
-      function addToList(list) {
-        
-        var slide_content = Reveal.getCurrentSlide()
-        list.push(slide_content)
-        
-        if (!Reveal.isLastSlide()) {
-          Reveal.next()
-        }
-      }
-
-
-    </script>
-</body>
-
-</html>
-
+    // we will need the post id (in [0]) & reblog key (in [1])
+    post_keys = getPostKeys(slide)
     
-  {% endif %}
+    // send keys as a post request
+    $.post( "reblog", function( data ) {
+      $( ".result" ).html( data );
+    });
+  
+    if (!Reveal.isLastSlide()) {
+      Reveal.right()
+    }
+  }
 
-    {% if g.user %}
-  <li><a href="{{ url_for('logout') }}">sign out [{{ g.user.name }}]</a>
-  {% else %}
-  <li><a href="{{ url_for('login') }}">sign in</a>
-  {% endif %}
+ function heart(slide) {
+    
+    // we will need the post id & reblog id
+    // hint: a function for this
+    // really these things should be in some <meta> field, but hidden
+    
+    if (!Reveal.isLastSlide()) {
+      Reveal.right()
+    }
+  }
+
+  function getPostKeys(slide) {
+
+    // returns true if this is a meta slide
+    if (slide.className.indexOf("meta") !== -1) {
+
+      // make it a jquery object
+      var meta = $(slide)
+
+      // get our post id from slide content
+      var post_id = meta.children('.id').html();
+
+    }
+
+    // if the current slide is display slide and not meta slide, 
+    // we have to get the metadata curcuitously 
+    else if (slide.className.indexOf("display") !== -1) {
+
+      //get post id
+      var post_id = slide.id
+
+      // the metadata for the post is in the next sibling of the viewed post
+      var meta = $('#'+post_id).next()
+    }
+
+    //get reblog key from meta
+    var reblog_key = meta.children('.reblog_key').html();
+
+    return [post_id,reblog_key]
+    
+
+  }
+
+</script>
+
+{% if g.user %}
+<li><a href="{{ url_for('logout') }}">sign out [{{ g.user.name }}]</a>
+{% else %}
+<li><a href="{{ url_for('login') }}">sign in</a>
+{% endif %}
 </ul>
 
 {% for message in get_flashed_messages() %}
@@ -82,4 +134,3 @@
 </html>
 
 {% endblock %}
-

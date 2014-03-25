@@ -1,11 +1,11 @@
 from flask import Flask, redirect, url_for, session, request
 from flask import g, session, request, url_for, flash
-from flask import redirect, render_template
+from flask import redirect, render_template, jsonify
 from flask_oauthlib.client import OAuth
 import pytumblr
 
 
-SECRET_KEY = 'development key'
+SECRET_KEY = 'a555c33332'
 DEBUG = True
 
 CONSUMER_KEY = 'eGV5NNygl2TLbDezHeUfcgArAPY6YSk3fE2dRUaNHOclQumJfu'
@@ -53,7 +53,7 @@ def index():
 
         # now let's fetch the next 80
         for i in range (4):
-            response = client.dashboard(type='photo', offset=20*i)
+            response = client.dashboard(type='photo', offset=20*(i+1))
             posts.extend(response['posts'])
 
         return render_template('index.html', posts=posts)
@@ -82,6 +82,10 @@ def oauthorized(resp):
         session['tumblr_oauth'] = resp
     return redirect(url_for('index'))
 
+@app.route('/reblog', methods=['POST'])
+def reblog():
+    print('ok got it')
+    return jsonify(status='ok')
 
 if __name__ == '__main__':
     app.run()
