@@ -4,10 +4,6 @@ from flask import redirect, render_template, jsonify
 from flask_oauthlib.client import OAuth
 import pytumblr
 
-
-# in the future, we have user select their blog
-blog_name = None
-
 SECRET_KEY = 'a555c33332'
 DEBUG = True
 
@@ -56,7 +52,11 @@ def index():
 
         # if user has picked a blog,
         # fetch posts
-        if blog_name:
+        try: 
+
+            # (this will cause a key error exception
+            # if user hasn't picked a blog)
+            session['blogname']
 
             # this gives first 20 posts
             response = client.dashboard(type='photo')
@@ -70,8 +70,11 @@ def index():
             return render_template('index.html', posts=posts)
 
         # if we have a session, but user hasn't picked a blog
-        else:
+        except KeyError:
 
+            session['blogname'] = None
+
+            # redirect user to a blog selection interface
             user_blogs = client.info()['user']['blogs']
             return render_template('whichblog.html', user_blogs=user_blogs)
 
@@ -92,7 +95,9 @@ def logout():
 def select_blog():
     # get post data
     blog_selection = request.form['blog']
-    print(blog_selection)
+
+    # save blog name as global, per-thread var
+    session['blogname'] = blog_selection
 
     return redirect(url_for('index'))
 
@@ -116,7 +121,7 @@ def reblog():
     oauth_token, oauth_token_secret = get_tumblr_token()
     client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
 
-    client.reblog(BLOG_NAME, id=post_id, reblog_key=reblog_key)
+    client.reblog(session['blogname'], id=post_id, reblog_key=reblog_key)
 
     return jsonify(status='ok')
 
@@ -145,7 +150,7 @@ def steal():
     oauth_token, oauth_token_secret = get_tumblr_token()
     client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
 
-    client.create_photo(BLOG_NAME, source=photo_url)
+    client.create_photo(session['blogname'], source=photo_url)
 
     return jsonify(status='ok')
 
