@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+	<title>Retrieve emails</title>
+  </head>
+  <body>
+  {% for email in emails %}
+    <li><div class='subject'>{{ email.subject }}<div></li>
+      <ul>
+        <li><div class='from'>{{ email.addresses.from.name }}<div></li>
+        <li><div class='to'>{{ email.addresses.to[0].email }}<div></li>
+      </ul>
+
+	{% else %}
+    <h1>No emails!</h1>
+	{% endfor %}
+  </body>
+</html>
+
