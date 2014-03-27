@@ -57,6 +57,7 @@
   KeyboardJS.on('q', function() { steal(Reveal.getCurrentSlide()) }, null)    
   KeyboardJS.on('w', function() { reblog(Reveal.getCurrentSlide()) }, null)    
   KeyboardJS.on('e', function() { like(Reveal.getCurrentSlide()) }, null)    
+  KeyboardJS.on('x', Reveal.down, Reveal.up)    
 
   
   function reblog(slide) {
