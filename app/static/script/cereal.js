@@ -128,7 +128,7 @@ function getPostPhoto(slide) {
 // applyToAllID is an ID, representing an HTML element id
 // if a value is passed, img will be applied to every main display slide associated with that id
 // (so, if it's a reblog key, )
-function attachSticker(img, class, section) {
+//function attachSticker(img, class, section) {
 
   // if section.attr('class') === meta
     // var main_slide = section.prev()
