@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 
+<h2> pick a blog to use</h2>
 {% for blog in user_blogs %} 
   <form method="POST" action="select_blog">
     <input type="submit" name="blog" value="{{blog['name']}}" />
@@ -14,9 +15,6 @@
 {% endif %}
 </ul>
 
-{% for message in get_flashed_messages() %}
-  <p class=message>{{ message }}
-{% endfor %}
 
 </body>
 </html>
