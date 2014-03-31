@@ -139,4 +139,4 @@ function getPostPhoto(slide) {
 
   //    add sticker
 
-}
+//}
