@@ -6,8 +6,8 @@ import pytumblr
 from HTMLParser import HTMLParser
 from app import app
 
-CONSUMER_KEY = 'FPLOKGJWPtZY8svlFUj2aHCTZM7E84PVA1YYBRLDufiPTMwWwE'
-CONSUMER_SECRET = 'Wpl9dCqYrOjuVoJCWh7n9z07A0YxZqnbC59mZpn1PHsmivZZhW'
+CONSUMER_KEY = 'T4SwozU8g0zcSvTlq3C3OVfIVYLUFV0q2Tlo5mlcbPMI3mU0pS'
+CONSUMER_SECRET = 'ivdHt8jOIzwNP8vijjz43i18cM82g8gVWb36YkPjAlJtVJmlaQ'
 
 oauth = OAuth()
 
