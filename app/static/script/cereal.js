@@ -33,6 +33,7 @@ function reblog(slide) {
       console.log(data) 
     });
 
+  // attach a sticker that shows the user reblogged it
   attachSticker('static/img/r.png', 'reblog', $(slide))
 
   if (!Reveal.isLastSlide()) {
@@ -51,6 +52,8 @@ function like(slide) {
     function( data ) {
       //console.log(data) 
     }); 
+
+  // get all the posts with the same ID as this one
 
   // attach a sticker that shows user likes it
   attachSticker('static/img/l.png', 'like', $(slide))
@@ -72,6 +75,10 @@ function steal(slide) {
     function( data ) {
       console.log(data) 
     }); 
+
+
+  // attach a sticker that shows the user stole it
+  attachSticker('static/img/s.png', 'steal', $(slide))
 
   // wait 300 ms before moving on 
   setTimeout(function() {

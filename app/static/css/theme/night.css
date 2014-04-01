@@ -77,7 +77,8 @@ body {
   transition: all .2s linear; }
 
 .reveal section .like img,
-.reveal section .reblog img {
+.reveal section .reblog img,
+.reveal section .steal img {
   width:30px;
   -webkit-transition: color .15s linear;
   -moz-transition: color .15s linear;
