@@ -58,10 +58,10 @@ function like(slide) {
   // attach a sticker that shows user likes it
   attachSticker('static/img/l.png', 'like', $(slide))
   
-  // wait 300 ms before moving on 
+  // wait 250 ms before moving on 
   setTimeout(function() {
     if (!Reveal.isLastSlide()) {Reveal.right() }
-  },200)
+  },250)
 
 }
 
@@ -80,10 +80,10 @@ function steal(slide) {
   // attach a sticker that shows the user stole it
   attachSticker('static/img/s.png', 'steal', $(slide))
 
-  // wait 300 ms before moving on 
+  // wait 250 ms before moving on 
   setTimeout(function() {
     if (!Reveal.isLastSlide()) {Reveal.right() }
-  },200)
+  },250)
 }
 
 function getPostKeys(slide) {
