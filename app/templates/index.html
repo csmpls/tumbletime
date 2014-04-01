@@ -1,33 +1,39 @@
 {% extends "layout.html" %}
 {% block body %}
 
-  {% if g.user and posts %}
+  
   <div class="reveal">
     <div class="slides">
+  
+      {% if g.user and posts %}
+        {% for post in posts %}
 
-    {% for post in posts %}
+            {% for photo in post['photos'] %}
+              <section>
 
-        {% for photo in post['photos'] %}
-          <section>
+                <section class="display" id="{{post['id']}}">
+                  <img src="{{photo['original_size']['url']}}">
+                </section>
 
-            <section class="display" id="{{post['id']}}">
-              <img src="{{photo['original_size']['url']}}">
-            </section>
+                <section class = "meta" id="{{post['reblog_key']}}">
+                  <div class ="blog-name">{{post['blog_name']}}</div>
+                  <div class ="source-title">{{post['source_title']}}</div>
+                  <div class ="caption">{{post['caption']}}</div>
+                </section>
 
-            <section class = "meta" id="{{post['reblog_key']}}">
-              <div class ="blog-name">{{post['blog_name']}}</div>
-              <div class ="source-title">{{post['source_title']}}</div>
-              <div class ="caption">{{post['caption']}}</div>
-            </section>
+              </section>
 
-          </section>
+            {% endfor %}
 
-        {% endfor %}
-
-    {% endfor %}
+  {% endfor %}
+    {% else %}
+      <section>
+        <h2>t u m b l e t i m e</h2>
+        <a href="/login">login with twitter</a>
+      </section>
+    {% endif %}
     </div>
   </div>
-  {% endif %}
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="static/script/head.min.js"></script>
