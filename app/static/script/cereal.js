@@ -33,6 +33,8 @@ function reblog(slide) {
       console.log(data) 
     });
 
+  attachSticker('static/img/r.png', 'reblog', $(slide))
+
   if (!Reveal.isLastSlide()) {
     Reveal.right()
   }
@@ -47,12 +49,17 @@ function like(slide) {
   $.post( "like", 
     {post_id: post_keys[0], reblog_key: post_keys[1]},
     function( data ) {
-      console.log(data) 
+      //console.log(data) 
     }); 
+
+  // attach a sticker that shows user likes it
+  attachSticker('static/img/l.png', 'like', $(slide))
   
-  if (!Reveal.isLastSlide()) {
-    Reveal.right()
-  }
+  // wait 300 ms before moving on 
+  setTimeout(function() {
+    if (!Reveal.isLastSlide()) {Reveal.right() }
+  },200)
+
 }
 
 function steal(slide) {
@@ -66,9 +73,10 @@ function steal(slide) {
       console.log(data) 
     }); 
 
-  if (!Reveal.isLastSlide()) {
-    Reveal.right()
-  }
+  // wait 300 ms before moving on 
+  setTimeout(function() {
+    if (!Reveal.isLastSlide()) {Reveal.right() }
+  },200)
 }
 
 function getPostKeys(slide) {
@@ -125,18 +133,26 @@ function getPostPhoto(slide) {
 
 
 // adds image to mainDisplay slide 
-// applyToAllID is an ID, representing an HTML element id
-// if a value is passed, img will be applied to every main display slide associated with that id
-// (so, if it's a reblog key, )
-//function attachSticker(img, class, section) {
+// type is the class of the div in which we place the sticker.
+function attachSticker(img, type, section) {
 
-  // if section.attr('class') === meta
-    // var main_slide = section.prev()
-  // else 
-    // var main_slide = section
+  // if section is a meta slide
+  if (section.attr('class').indexOf('meta') != -1) {
+     // get the main slide
+     var main_slide = section.prev()
+     // go up to the main slide visually
+     Reveal.up()
+   }
+  // otherwise
+  else 
+    // section is the main slide
+    var main_slide = section
+
 
   //  if main_slide DOES NOT already has div of class
+  if (main_slide.children('.'+type).html() == undefined) {
+      // add sticker
+      main_slide.append('<div class="'+type+'"><img src="'+img+'"></div>')
+  }
 
-  //    add sticker
-
-//}
+}

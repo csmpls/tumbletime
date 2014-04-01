@@ -102,6 +102,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('tumblr_oauth', None)
+    session.pop('blogname', None)
     return redirect(url_for('index'))
 
 @app.route('/select_blog', methods=['POST'])
