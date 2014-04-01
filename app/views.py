@@ -62,11 +62,7 @@ def index():
 
         # if user has picked a blog,
         # fetch posts
-        try: 
-
-            # (this will cause a key error exception
-            # if user hasn't picked a blog)
-            session['blogname']
+        if 'blogname' in session: 
 
             # this gives first 20 posts
             response = client.dashboard(type='photo')
@@ -83,10 +79,7 @@ def index():
             return render_template('index.html', posts=posts)
 
         # if we have a session, but user hasn't picked a blog
-        except KeyError:
-
-            session['blogname'] = None
-
+        else:
             # redirect user to a blog selection interface
             user_blogs = client.info()['user']['blogs']
             return render_template('whichblog.html', user_blogs=user_blogs)
