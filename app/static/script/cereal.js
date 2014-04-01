@@ -21,6 +21,15 @@ KeyboardJS.on('e', function() { like(Reveal.getCurrentSlide()) }, null)
 KeyboardJS.on('j', Reveal.down, Reveal.up)    
 
 
+// preload icons
+img1 = new Image();
+img1.src = "static/img/r.png";
+img2 = new Image();
+img2.src = "static/img/l.png";
+img3 = new Image();
+img3.src = "static/img/s.png";
+
+
 function reblog(slide) {
 
   // we will need the post id (in [0]) & reblog key (in [1])
