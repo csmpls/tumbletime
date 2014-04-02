@@ -21,6 +21,7 @@ KeyboardJS.on('e', function() { note('e'); checkIfDone(); like(Reveal.getCurrent
 KeyboardJS.on('j', function() { note('j'); checkIfDone(); Reveal.down() }, Reveal.up)    
 KeyboardJS.on('h', function() { note('h'); }, null); 
 KeyboardJS.on('l', function() { note('l'); checkIfDone() }, null); 
+KeyboardJS.on('right', function() { note('l'); checkIfDone() }, null); 
 
 
 function reblog(slide) {
