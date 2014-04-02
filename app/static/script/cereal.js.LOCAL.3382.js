@@ -14,13 +14,20 @@ Reveal.initialize({
 });
 
 // set keyboard shortcuts
-// note() logs each keyboard shortcut on our local log
-KeyboardJS.on('q', function() { note('q'); checkIfDone(); steal(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('w', function() { note('w'); checkIfDone(); reblog(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('e', function() { note('e'); checkIfDone(); like(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('j', function() { note('j'); checkIfDone(); Reveal.down() }, Reveal.up)    
-KeyboardJS.on('h', function() { note('h'); }, null); 
-KeyboardJS.on('l', function() { note('l'); checkIfDone() }, null); 
+
+KeyboardJS.on('q', function() { steal(Reveal.getCurrentSlide()) }, null)    
+KeyboardJS.on('w', function() { reblog(Reveal.getCurrentSlide()) }, null)    
+KeyboardJS.on('e', function() { like(Reveal.getCurrentSlide()) }, null)    
+KeyboardJS.on('j', Reveal.down, Reveal.up)    
+
+
+// preload icons
+img1 = new Image();
+img1.src = "static/img/r.png";
+img2 = new Image();
+img2.src = "static/img/l.png";
+img3 = new Image();
+img3.src = "static/img/s.png";
 
 
 function reblog(slide) {
@@ -38,9 +45,10 @@ function reblog(slide) {
   // attach a sticker that shows the user reblogged it
   attachSticker('static/img/r.png', 'reblog', $(slide))
 
-  // wait 250 ms before moving on 
-  setTimeout(Reveal.right,250)
-
+ // wait 250 ms before moving on 
+  setTimeout(function() {
+    if (!Reveal.isLastSlide()) {Reveal.right() }
+  },250)
 }
 
 function like(slide) {
@@ -61,12 +69,13 @@ function like(slide) {
   attachSticker('static/img/l.png', 'like', $(slide))
   
   // wait 250 ms before moving on 
-  setTimeout(Reveal.right,250)
+  setTimeout(function() {
+    if (!Reveal.isLastSlide()) {Reveal.right() }
+  },250)
 
 }
 
 function steal(slide) {
-
   // get the photo url
   var photo_url = getPostPhoto(slide)
 
@@ -82,8 +91,9 @@ function steal(slide) {
   attachSticker('static/img/s.png', 'steal', $(slide))
 
   // wait 250 ms before moving on 
-  setTimeout(Reveal.right,250)
-
+  setTimeout(function() {
+    if (!Reveal.isLastSlide()) {Reveal.right() }
+  },250)
 }
 
 function getPostKeys(slide) {
@@ -100,10 +110,8 @@ function getPostKeys(slide) {
     // get our post id from slide content
     var post_id = display.attr('id')
 
-  }
-
   // if the current slide is display slide, 
-  else if (slide.className.indexOf("display") !== -1) {
+  } else if (slide.className.indexOf("display") !== -1) {
 
     //get post id from its id
     var post_id = slide.id
@@ -161,40 +169,5 @@ function attachSticker(img, type, section) {
       // add sticker
       main_slide.append('<div class="'+type+'"><img src="'+img+'"></div>')
   }
-
-}
-
-var keylog = []
-
-// adds char to memory, with timestamp
-function note(char) {
-  var d = new Date().getTime()
-  keylog.push({key:char, time:d})
-}
-
-
-function checkIfDone() {
-
-  if (Reveal.isLastSlide()) {
-
-    console.log(JSON.stringify({log: keylog}))
-
-   // post the json object to server
-    $.ajax({
-      type: 'POST',
-      url: '/done',
-      contentType: 'application/json',
-      dataType:'json',
-      data: JSON.stringify({log: keylog}),
-      success: function(data) {
-
-        // give the user feedback by removing everything
-        $('.slides').empty()
-        $('.slides').append("<section><h2>thanks for participating!</h2> you're all done. go get the experimeter.</section>")
-
-      }
-    }) 
-  }
-
 
 }
