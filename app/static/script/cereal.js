@@ -187,9 +187,14 @@ function checkIfDone() {
       dataType:'json',
       data: JSON.stringify({log: keylog}),
       success: function(data) {
-        console.log(data)
+
+        // give the user feedback by removing everything
+        $('.slides').empty()
+        $('.slides').append("<section><h2>thanks for participating!</h2> you're all done. go get the experimeter.</section>")
+
       }
     }) 
   }
+
 
 }
