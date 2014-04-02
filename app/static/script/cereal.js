@@ -45,9 +45,10 @@ function reblog(slide) {
   // attach a sticker that shows the user reblogged it
   attachSticker('static/img/r.png', 'reblog', $(slide))
 
-  if (!Reveal.isLastSlide()) {
-    Reveal.right()
-  }
+ // wait 250 ms before moving on 
+  setTimeout(function() {
+    if (!Reveal.isLastSlide()) {Reveal.right() }
+  },250)
 }
 
 function like(slide) {
@@ -109,10 +110,8 @@ function getPostKeys(slide) {
     // get our post id from slide content
     var post_id = display.attr('id')
 
-  }
-
   // if the current slide is display slide, 
-  else if (slide.className.indexOf("display") !== -1) {
+  } else if (slide.className.indexOf("display") !== -1) {
 
     //get post id from its id
     var post_id = slide.id
