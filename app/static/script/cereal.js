@@ -18,7 +18,7 @@ Reveal.initialize({
 KeyboardJS.on('q', function() { note('q'); checkIfDone(); steal(Reveal.getCurrentSlide()) }, null)    
 KeyboardJS.on('w', function() { note('w'); checkIfDone(); reblog(Reveal.getCurrentSlide()) }, null)    
 KeyboardJS.on('e', function() { note('e'); checkIfDone(); like(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('j', function() { note('j'); checkIfDone(); Reveal.down() }, Reveal.up)    
+KeyboardJS.on('j', function() { note('j'); ; Reveal.down() }, Reveal.up)    
 KeyboardJS.on('h', function() { note('h'); }, null); 
 KeyboardJS.on('l', function() { note('l'); checkIfDone() }, null); 
 KeyboardJS.on('right', function() { note('l'); checkIfDone() }, null); 
