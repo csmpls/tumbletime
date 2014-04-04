@@ -12,26 +12,7 @@
           press SKIP to begin.... 
         </section>
 
-        {% for post in posts %}
-
-            {% for photo in post['photos'] %}
-              <section>
-
-                <section class="display" id="{{post['id']}}">
-                  <img src="{{photo['original_size']['url']}}">
-                </section>
-
-                <section class = "meta" id="{{post['reblog_key']}}">
-                  <div class ="blog-name">{{post['blog_name']}}</div>
-                  <div class ="source-title">{{post['source_title']}}</div>
-                  <div class ="caption">{{post['caption']}}</div>
-                </section>
-
-              </section>
-
-            {% endfor %}
-
-  {% endfor %}
+        {% include "show_posts.html" %}
 
   <section>
     <h2> ~ that is all ~ </h2>
