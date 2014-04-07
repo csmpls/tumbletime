@@ -5,13 +5,15 @@
 
       <section class="display" id="{{post['id']}}">
         <img src="{{photo['original_size']['url']}}">
-        <h6>{{post['blog-name']}}</h6>
+        <br>
+        <h6>{{post['blog_name']}}</h6>
       </section>
 
       <section class = "meta" id="{{post['reblog_key']}}">
-        <div class ="blog-name">{{post['blog_name']}}</div>
-        <div class ="source-title">{{post['source_title']}}</div>
         <div class ="caption">{{post['caption']}}</div>
+        {% if (post['source_title']): %}
+          <div class ="source-title">(via {{post['source_title']}})</div>
+        {% endif %}
       </section>
 
     </section>
