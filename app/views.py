@@ -73,15 +73,14 @@ def index():
             response = client.dashboard(type='photo')
             posts.extend(response['posts'])
 
-            # # now let's fetch the next 80
-            # for i in range (4):
-            #     response = client.dashboard(type='photo', offset=20*(i+1))
-            #     posts.extend(response['posts'])
-
             for post in posts:
                 post['caption'] = strip_tags(post['caption'])
 
-            return render_template('index.html', posts=posts)
+
+            # create a session var keep track off where our user is in the feed
+            session['offset'] = 1
+
+            return render_template('index.html', posts=posts, load_message=get_load_message())
 
         # if we have a session, but user hasn't picked a blog
         else:
@@ -89,7 +88,7 @@ def index():
             user_blogs = client.info()['user']['blogs']
             return render_template('whichblog.html', user_blogs=user_blogs)
 
-    return render_template('index.html', posts=None, load_message=get_load_message())
+    return render_template('index.html', posts=None)
 
 @app.route('/login')
 def login():
@@ -108,10 +107,36 @@ def select_blog():
     # get post data
     blog_selection = request.form['blog']
 
-    # save blog name as global, per-thread var
+    # save blog name as session var
     session['blogname'] = blog_selection
 
     return redirect(url_for('index'))
+
+
+@app.route('/more', methods=['GET'])
+def get_more():
+
+    posts = []
+
+    session['offset'] += 1
+
+    if g.user and 'blogname' in session:
+
+         # authenticate the user
+        oauth_token, oauth_token_secret = get_tumblr_token()
+        client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+
+
+        # give next 20 posts from offset 
+        response = client.dashboard(type='photo', offset=20*session['offset'])
+        posts.extend(response['posts'])
+
+        for post in posts:
+            post['caption'] = strip_tags(post['caption'])
+
+        return render_template('show_posts.html', posts=posts, load_message=get_load_message())
+
+
 
 @app.route('/oauthorized')
 @tumblr.authorized_handler
