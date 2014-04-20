@@ -35,6 +35,10 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
+
+def get_load_message():
+    return 'reaching into the void......'
+
 @tumblr.tokengetter
 def get_tumblr_token():
     if 'tumblr_oauth' in session:
@@ -69,10 +73,10 @@ def index():
             response = client.dashboard(type='photo')
             posts.extend(response['posts'])
 
-            # now let's fetch the next 80
-            for i in range (4):
-                response = client.dashboard(type='photo', offset=20*(i+1))
-                posts.extend(response['posts'])
+            # # now let's fetch the next 80
+            # for i in range (4):
+            #     response = client.dashboard(type='photo', offset=20*(i+1))
+            #     posts.extend(response['posts'])
 
             for post in posts:
                 post['caption'] = strip_tags(post['caption'])
@@ -85,7 +89,7 @@ def index():
             user_blogs = client.info()['user']['blogs']
             return render_template('whichblog.html', user_blogs=user_blogs)
 
-    return render_template('index.html', posts=None)
+    return render_template('index.html', posts=None, load_message=get_load_message())
 
 @app.route('/login')
 def login():

@@ -6,7 +6,7 @@ Reveal.initialize({
   history: false,
   center: true,
   //autoSlide: 5000,
-  keyboard: true,
+  keyboard: false,
   //loop: true,
 
   theme: Reveal.getQueryHash().theme || 'night', // available themes are in /css/theme
@@ -19,12 +19,12 @@ KeyboardJS.on('q', function() { checkIfDone(); steal(Reveal.getCurrentSlide()) }
 KeyboardJS.on('w', function() { checkIfDone(); reblog(Reveal.getCurrentSlide()) }, null)    
 KeyboardJS.on('e', function() { checkIfDone(); like(Reveal.getCurrentSlide()) }, null)    
 KeyboardJS.on('j', function() { ; Reveal.down() }, Reveal.up)    
-//KeyboardJS.on('h', function() { }, null); 
-KeyboardJS.on('l', function() { checkIfDone() }, null); 
-KeyboardJS.on('right', function() { checkIfDone() }, null); 
+KeyboardJS.on('h', Reveal.left, null); 
+KeyboardJS.on('l', Reveal.right, null); 
+KeyboardJS.on('f', Reveal.fullscreen, null); 
 
 
-function reblog(slide) {
+function reblog(slfide) {
 
   // we will need the post id (in [0]) & reblog key (in [1])
   post_keys = getPostKeys(slide)

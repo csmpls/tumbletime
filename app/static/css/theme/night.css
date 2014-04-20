@@ -31,18 +31,19 @@ body {
 .reveal h2,
 .reveal h3,
 .reveal h4,
-.reveal h5,
-.reveal h6 {
+.reveal h5,{
   margin: 0 0 20px 0;
   text-transform: uppercase;
   font-family: "audimatregular",sans-serif;
   line-height: 0.9em;
   letter-spacing: 0.08em;
-  font-size:1em;
+  font-size:1.0em;
   text-shadow: none; }
 
-.reveal h1 {
-  font-size: .7em;
+.reveal h6 {
+  text-transform: uppercase;
+  font-family: "audimatregular",sans-serif;
+  font-size:0.5em;
 }
 
 

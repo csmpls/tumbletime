@@ -8,17 +8,18 @@
       {% if g.user and posts %}
 
         <section>
-          <h2>are you ready to &nbsp; t u m b l e</h2>
+          <h2>are you ready to &nbsp; t u m b l e &nbsp; ?</h2>
           <img src="/static/img/l.png" style="width:30px">
           <img src="/static/img/r.png" style="width:30px">
-          <img src="/static/img/s.png" style="width:30px">
+          <img src="/static/img/s.png" style="width:30px"><br>
+          <img src="/static/img/tut.gif" style="width:500px; max-width:100%">
         </section>
 
         {% include "show_posts.html" %}
 
   <section>
-    <h2> ~ that is all ~ </h2>
-    press --> 
+    <h6>{{load_message}}</h6>
+    <img src="/static/img/w8.gif" style="width:100px">
   </section>
   
     {% else %}

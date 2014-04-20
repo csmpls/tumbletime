@@ -3245,6 +3245,7 @@ var Reveal = (function(){
 		down: navigateDown,
 		prev: navigatePrev,
 		next: navigateNext,
+		fullscreen: enterFullscreen,
 
 		// Fragment methods
 		navigateFragment: navigateFragment,
