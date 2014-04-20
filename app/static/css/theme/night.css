@@ -9,15 +9,15 @@
  * GLOBAL STYLES
  *********************************************/
 body {
-  background: #020202;
-  background-color: #020202; }
+  background: #000000;
+  background-color: #000000; }
 
 .reveal {
   font-family: "Open Sans", sans-serif;
   font-size: 27px;
   font-weight: normal;
   letter-spacing: -0.02em;
-  color: #eeeeee; }
+  color: #fff; }
 
 ::selection {
   color: white;
@@ -35,21 +35,16 @@ body {
 .reveal h6 {
   margin: 0 0 20px 0;
   text-transform: uppercase;
-  color: #eeeeee;
   font-family: "audimatregular",sans-serif;
   line-height: 0.9em;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.08em;
+  font-size:1em;
   text-shadow: none; }
 
 .reveal h1 {
   font-size: .7em;
 }
 
-.reveal h6 {
-  color: #cccccc;
-  font-size:.5em;
-  text-transform: uppercase;
-}
 
 /*********************************************
  * LINKS
@@ -137,7 +132,7 @@ body {
   background: rgba(0, 0, 0, 0.2); }
 
 .reveal .progress span {
-  background: #0f946a;
+  background: #709080;
   -webkit-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
   -moz-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
   -ms-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);

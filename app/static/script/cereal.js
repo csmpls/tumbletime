@@ -15,13 +15,13 @@ Reveal.initialize({
 
 // set keyboard shortcuts
 // note() logs each keyboard shortcut on our local log
-KeyboardJS.on('q', function() { note('q'); checkIfDone(); steal(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('w', function() { note('w'); checkIfDone(); reblog(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('e', function() { note('e'); checkIfDone(); like(Reveal.getCurrentSlide()) }, null)    
-KeyboardJS.on('j', function() { note('j'); ; Reveal.down() }, Reveal.up)    
-KeyboardJS.on('h', function() { note('h'); }, null); 
-KeyboardJS.on('l', function() { note('l'); checkIfDone() }, null); 
-KeyboardJS.on('right', function() { note('l'); checkIfDone() }, null); 
+KeyboardJS.on('q', function() { checkIfDone(); steal(Reveal.getCurrentSlide()) }, null)    
+KeyboardJS.on('w', function() { checkIfDone(); reblog(Reveal.getCurrentSlide()) }, null)    
+KeyboardJS.on('e', function() { checkIfDone(); like(Reveal.getCurrentSlide()) }, null)    
+KeyboardJS.on('j', function() { ; Reveal.down() }, Reveal.up)    
+//KeyboardJS.on('h', function() { }, null); 
+KeyboardJS.on('l', function() { checkIfDone() }, null); 
+KeyboardJS.on('right', function() { checkIfDone() }, null); 
 
 
 function reblog(slide) {
@@ -165,37 +165,10 @@ function attachSticker(img, type, section) {
 
 }
 
-var keylog = []
-
-// adds char to memory, with timestamp
-function note(char) {
-  var d = new Date().getTime()
-  keylog.push({key:char, time:d})
-}
-
-
 function checkIfDone() {
 
   if (Reveal.isLastSlide()) {
 
-    console.log(JSON.stringify({log: keylog}))
-
-   // post the json object to server
-    $.ajax({
-      type: 'POST',
-      url: '/done',
-      contentType: 'application/json',
-      dataType:'json',
-      data: JSON.stringify({log: keylog}),
-      success: function(data) {
-
-        // give the user feedback by removing everything
-        $('.slides').empty()
-        $('.slides').append("<section><h2>thanks for participating!</h2> you're all done. go get the experimeter.</section>")
-
-      }
-    }) 
   }
-
 
 }
