@@ -5,7 +5,19 @@ from flask_oauthlib.client import OAuth
 import pytumblr, json
 from datetime import datetime
 from HTMLParser import HTMLParser
+from random import choice
 from app import app
+
+
+load_messages = ['reaching into the void.......',
+'im loading hold up .....',
+'wait........',
+'1 sec..........',
+'hold up........',
+'summoning........',
+'siphoning your things thru the ether 1 sec........',
+'purveying bits...........',
+'thisll just be a sec.......']
 
 CONSUMER_KEY = 'T4SwozU8g0zcSvTlq3C3OVfIVYLUFV0q2Tlo5mlcbPMI3mU0pS'
 CONSUMER_SECRET = 'ivdHt8jOIzwNP8vijjz43i18cM82g8gVWb36YkPjAlJtVJmlaQ'
@@ -37,7 +49,7 @@ def strip_tags(html):
 
 
 def get_load_message():
-    return 'reaching into the void......'
+    return choice(load_messages)
 
 @tumblr.tokengetter
 def get_tumblr_token():

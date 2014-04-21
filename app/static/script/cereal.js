@@ -169,16 +169,17 @@ function attachSticker(img, type, section) {
 Reveal.addEventListener( 'loadmore', function() {
   console.log('loading.....')
   $.get( "/more", function( data ) {
-    console.log(data)
 
     $('.slides').append(data)
 
-    Reveal.right()
+    setTimeout(function() {
+      $('#loadingdiv').remove()
 
-    $('#loadingdiv').remove()
+      //hack
+      Reveal.left()
+      Reveal.right()
 
-
-    Reveal.left()
+    },350)
 
   });
 }, false );
