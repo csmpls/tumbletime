@@ -10,7 +10,7 @@ from app import app
 
 
 load_messages = ['reaching into the void.......',
-'im loading hold up .....',
+'loading shit hold up .....',
 'wait........',
 '1 sec..........',
 'hold up........',
