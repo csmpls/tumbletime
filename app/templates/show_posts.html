@@ -3,17 +3,25 @@
   {% for photo in post['photos'] %}
     <section>
 
-      <section class="display" id="{{post['id']}}">
+      <section class="display {{post['id']}}" id="{{post['id']}}">
+
         <img src="{{photo['original_size']['url']}}">
         <br>
         <h6>{{post['blog_name']}}</h6>
+
       </section>
 
-      <section class = "meta" id="{{post['reblog_key']}}">
-        <div class ="caption">{{post['caption']}}</div>
-        {% if (post['source_title']): %}
-          <div class ="source-title">(via {{post['source_title']}})</div>
+      <section class = "meta {{post['reblog_key']}}" id="{{post['reblog_key']}}">
+
+        {% if post['caption']: %}
+          <div class ="caption">{{post['caption']}}</div>
+          {% if (post['source_title']): %}
+            <div class ="source-title">(via {{post['source_title']}})</div>
+          {% endif %}
+        {% else: %}
+          <h6>(no text)</h6>
         {% endif %}
+      
       </section>
 
     </section>

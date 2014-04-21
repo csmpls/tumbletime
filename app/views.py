@@ -15,13 +15,13 @@ load_messages = ['reaching into the void.......',
 '1 sec..........',
 'hold up........',
 'summoning........',
-'siphoning your things thru the ether.........',
+'siphoning matter thru the ether.........',
+'manipulating energy across long distances.......',
 'pulling thangs finding thangs......',
 'loading thangs.......',
 'it is loading.........',
 'loadin shouldnt take 2 long....',
 'pushing things thru the tubes....',
-'420 blaze it',
 'h/o......',
 'brt......',
 'coming....',
@@ -91,7 +91,7 @@ def index():
         if 'blogname' in session: 
 
             # this gives first 20 posts
-            response = client.dashboard(type='photo')
+            response = client.dashboard(type='photo', limit=10)
             posts.extend(response['posts'])
 
             for post in posts:
@@ -149,11 +149,16 @@ def get_more():
 
 
         # give next 20 posts from offset 
-        response = client.dashboard(type='photo', offset=20*session['offset'])
+        # TODO: use since id
+        response = client.dashboard(type='photo', limit=10, offset=10*session['offset'])
         posts.extend(response['posts'])
 
+        # strip captions of html, for clean display
         for post in posts:
             post['caption'] = strip_tags(post['caption'])
+
+        # find the first few images we'll show
+        # so we can precache them client-side 
 
         return render_template('show_posts.html', posts=posts, load_message=get_load_message())
 

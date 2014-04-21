@@ -33,8 +33,18 @@ function reblog(slide) {
   $.post( "reblog", 
     {post_id: post_keys[0], reblog_key: post_keys[1]},
     function( data ) {
-      console.log(data) 
+
     });
+
+  // // can we retrieve all posts from this set using the reblog key?
+  // var posts_of_same_origin = $('.slides').find("."+post_keys[1])
+  // $.each(posts_of_same_origin, function(i) {
+  //   try {
+  //    attachSticker('static/img/r.png', 'reblog',i)
+  //   } finally {
+  //     console.log(i)
+  //   }
+  // })
 
   // attach a sticker that shows the user reblogged it
   attachSticker('static/img/r.png', 'reblog', $(slide))
