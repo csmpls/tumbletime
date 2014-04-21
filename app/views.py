@@ -15,9 +15,18 @@ load_messages = ['reaching into the void.......',
 '1 sec..........',
 'hold up........',
 'summoning........',
-'siphoning your things thru the ether 1 sec........',
+'siphoning your things thru the ether.........',
+'pulling thangs finding thangs......',
+'loading thangs.......',
+'it is loading.........',
+'loadin shouldnt take 2 long....',
+'pushing things thru the tubes....',
+'420 blaze it',
+'h/o......',
+'brt......',
+'coming....',
 'purveying bits...........',
-'thisll just be a sec.......']
+'loadin just be a sec.......']
 
 CONSUMER_KEY = 'T4SwozU8g0zcSvTlq3C3OVfIVYLUFV0q2Tlo5mlcbPMI3mU0pS'
 CONSUMER_SECRET = 'ivdHt8jOIzwNP8vijjz43i18cM82g8gVWb36YkPjAlJtVJmlaQ'
