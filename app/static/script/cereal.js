@@ -1,3 +1,5 @@
+var place = 0
+
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
@@ -19,9 +21,9 @@ KeyboardJS.on('q', function() { steal(Reveal.getCurrentSlide()) }, null)
 KeyboardJS.on('w', function() { reblog(Reveal.getCurrentSlide()) }, null)    
 KeyboardJS.on('e', function() { like(Reveal.getCurrentSlide()) }, null)    
 KeyboardJS.on('j', function() { ; Reveal.down() }, Reveal.up)    
-KeyboardJS.on('h', Reveal.left, null); 
-KeyboardJS.on('l', Reveal.right, null); 
-KeyboardJS.on('f', Reveal.fullscreen, null); 
+KeyboardJS.on('h', Reveal.left, null)
+KeyboardJS.on('l', Reveal.right, null)
+KeyboardJS.on('f', Reveal.fullscreen, null)
 
 
 function reblog(slide) {
@@ -36,18 +38,11 @@ function reblog(slide) {
 
     });
 
-  // // can we retrieve all posts from this set using the reblog key?
-  // var posts_of_same_origin = $('.slides').find("."+post_keys[1])
-  // $.each(posts_of_same_origin, function(i) {
-  //   try {
-  //    attachSticker('static/img/r.png', 'reblog',i)
-  //   } finally {
-  //     console.log(i)
-  //   }
-  // })
-
-  // attach a sticker that shows the user reblogged it
-  attachSticker('static/img/r.png', 'reblog', $(slide))
+  // put a reblog sticker on all posts from this set
+  var posts_of_same_origin = $('.slides').find("."+post_keys[1])
+  $.each(posts_of_same_origin, function(i,v) {
+    attachSticker('static/img/r.png', 'reblog', $(v));
+  })
 
   // wait 250 ms before moving on 
   setTimeout(Reveal.right,250)
@@ -66,11 +61,12 @@ function like(slide) {
       //console.log(data) 
     }); 
 
-  // get all the posts with the same ID as this one
+  // put a like sticker on all posts with this id 
+   var posts_of_same_origin = $('.slides').find("."+post_keys[0])
+   $.each(posts_of_same_origin, function(i,v) {
+    attachSticker('static/img/l.png', 'like', $(v));
+   })
 
-  // attach a sticker that shows user likes it
-  attachSticker('static/img/l.png', 'like', $(slide))
-  
   // wait 250 ms before moving on 
   setTimeout(Reveal.right,250)
 
@@ -177,11 +173,13 @@ function attachSticker(img, type, section) {
 
 
 Reveal.addEventListener( 'loadmore', function() {
-  console.log('loading.....')
+
   $.get( "/more", function( data ) {
 
+    // add new slides once request completes
     $('.slides').append(data)
 
+    // wait 800 ms before going forward - this is a hack
     setTimeout(function() {
       $('#loadingdiv').remove()
 
@@ -189,7 +187,7 @@ Reveal.addEventListener( 'loadmore', function() {
       Reveal.left()
       Reveal.right()
 
-    },350)
+    },800)
 
   });
 }, false );

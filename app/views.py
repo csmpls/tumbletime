@@ -10,22 +10,26 @@ from app import app
 
 
 load_messages = ['reaching into the void.......',
-'loading shit hold up .....',
-'wait........',
-'1 sec..........',
+'1 second..........',
 'hold up........',
 'summoning........',
-'siphoning matter thru the ether.........',
+'sucking matter through the ether.........',
+'doo do dooo......',
+'thinking abt bands i like.....',
+'swarms of bits like so many bees.......',
 'manipulating energy across long distances.......',
 'pulling thangs finding thangs......',
-'loading thangs.......',
 'it is loading.........',
-'loadin shouldnt take 2 long....',
-'pushing things thru the tubes....',
+'shouldnt take 2 long....',
+'pushing electrons thru tubes....',
+'matter/energy cascading across great distance.....'
 'h/o......',
-'brt......',
-'coming....',
-'purveying bits...........',
+'shoveling bits...........',
+'stone cold cruising on the info superhighway.....',
+'be here now! ..........',
+'sifting, searching ..........',
+'om....',
+'assembling order from chaos......',
 'loadin just be a sec.......']
 
 CONSUMER_KEY = 'T4SwozU8g0zcSvTlq3C3OVfIVYLUFV0q2Tlo5mlcbPMI3mU0pS'
@@ -60,6 +64,29 @@ def strip_tags(html):
 def get_load_message():
     return choice(load_messages)
 
+def get_dashboard_posts():
+
+    posts = []
+
+    if g.user and 'blogname' in session:
+
+        # authenticate the user
+        oauth_token, oauth_token_secret = get_tumblr_token()
+        client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+
+        # get dashboard posts
+        response = client.dashboard(type='photo', limit=10, offset=session['offset']*10)
+
+        posts.extend(response['posts'])
+
+        session['offset'] += 1
+
+        # strip captions of html, for clean display
+        for post in posts:
+            post['caption'] = strip_tags(post['caption'])
+
+    return posts
+
 @tumblr.tokengetter
 def get_tumblr_token():
     if 'tumblr_oauth' in session:
@@ -77,38 +104,30 @@ def before_request():
 @app.route('/')
 def index():
 
-    posts = [] 
-
     # do we have a session going?
     if g.user:
 
-        # authenticate the user
-        oauth_token, oauth_token_secret = get_tumblr_token()
-        client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+        # if blogname is picked - return posts
+        if 'blogname' in session:
 
-        # if user has picked a blog,
-        # fetch posts
-        if 'blogname' in session: 
+            # start them at beginning of their feed
+            session['offset'] = 0
 
-            # this gives first 20 posts
-            response = client.dashboard(type='photo', limit=10)
-            posts.extend(response['posts'])
+            return render_template('index.html', posts=get_dashboard_posts(), load_message=get_load_message())
 
-            for post in posts:
-                post['caption'] = strip_tags(post['caption'])
-
-
-            # create a session var keep track off where our user is in the feed
-            session['offset'] = 1
-
-            return render_template('index.html', posts=posts, load_message=get_load_message())
-
-        # if we have a session, but user hasn't picked a blog
+        # if we have a session, but user hasn't picked a blog,
+        # redirect user to a blog selection interface
         else:
-            # redirect user to a blog selection interface
+
+            # authenticate the user
+            oauth_token, oauth_token_secret = get_tumblr_token()
+            client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
+
             user_blogs = client.info()['user']['blogs']
+
             return render_template('whichblog.html', user_blogs=user_blogs)
 
+    # if we don't have a session, rendering index.html with null posts will prompt the user to log in
     return render_template('index.html', posts=None)
 
 @app.route('/login')
@@ -129,6 +148,7 @@ def select_blog():
     blog_selection = request.form['blog']
 
     # save blog name as session var
+    # and start a var for since id
     session['blogname'] = blog_selection
 
     return redirect(url_for('index'))
@@ -137,30 +157,13 @@ def select_blog():
 @app.route('/more', methods=['GET'])
 def get_more():
 
-    posts = []
+    if 'blogname' in session and g.user:
 
-    session['offset'] += 1
-
-    if g.user and 'blogname' in session:
-
-         # authenticate the user
-        oauth_token, oauth_token_secret = get_tumblr_token()
-        client = pytumblr.TumblrRestClient(CONSUMER_KEY,CONSUMER_SECRET,oauth_token, oauth_token_secret)
-
-
-        # give next 20 posts from offset 
-        # TODO: use since id
-        response = client.dashboard(type='photo', limit=10, offset=10*session['offset'])
-        posts.extend(response['posts'])
-
-        # strip captions of html, for clean display
-        for post in posts:
-            post['caption'] = strip_tags(post['caption'])
-
-        # find the first few images we'll show
-        # so we can precache them client-side 
+        posts = get_dashboard_posts()
 
         return render_template('show_posts.html', posts=posts, load_message=get_load_message())
+
+    return redirect(url_for('index')) 
 
 
 
