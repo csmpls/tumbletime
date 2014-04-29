@@ -20,17 +20,14 @@ load_messages = ['reaching into the void.......',
 'manipulating energy across long distances.......',
 'pulling thangs finding thangs......',
 'it is loading.........',
-'shouldnt take 2 long....',
 'pushing electrons thru tubes....',
 'matter/energy cascading across great distance.....'
 'h/o......',
 'shoveling bits...........',
 'stone cold cruising on the info superhighway.....',
-'be here now! ..........',
-'sifting, searching ..........',
-'om....',
-'assembling order from chaos......',
-'loadin just be a sec.......']
+'reaching into the void ..........',
+'sifting ..........',
+'going ........']
 
 CONSUMER_KEY = 'T4SwozU8g0zcSvTlq3C3OVfIVYLUFV0q2Tlo5mlcbPMI3mU0pS'
 CONSUMER_SECRET = 'ivdHt8jOIzwNP8vijjz43i18cM82g8gVWb36YkPjAlJtVJmlaQ'
